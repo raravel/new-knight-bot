@@ -240,6 +240,13 @@ export class LarkApi {
                     .map(([key, val]) => val);
 
                 const weaponElementList = ignoreGemsList.filter((val: any) => {
+                    const element_007 = val?.Element_007?.value?.Element_000;
+                    if ( typeof element_007 === 'string' ) {
+                        if ( element_007.text() === '세트 효과 레벨' ) {
+                            return true;
+                        }
+                    }
+
                     const element_008 = val?.Element_008?.value?.Element_000;
                     if ( typeof element_008 === 'string' ) {
                         if ( element_008.text() === '세트 효과 레벨' ) {
