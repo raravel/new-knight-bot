@@ -1,6 +1,7 @@
 import { Module } from '@cordwork/core';
 import { LarkApi } from '../utils/lark.api';
 import { SearchCommand } from './search.command';
+import { GemsCommand } from './gems.command';
 
 @Module({
 	imports: [
@@ -9,7 +10,7 @@ import { SearchCommand } from './search.command';
 			useValue: new LarkApi(),
 		},
 	],
-	commands: [SearchCommand],
+	commands: [SearchCommand, GemsCommand],
 })
 export class LarkModule {
 
