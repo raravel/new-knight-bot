@@ -4,6 +4,7 @@ import {
 	CordWorkClient,
 } from "@cordwork/core";
 import { Message, TextChannel } from 'discord.js';
+import { useRaidCreated } from "./tunnel";
 
 @DiscordEvent('messageCreate')
 export class ScheduleMessageCreate {
@@ -13,6 +14,12 @@ export class ScheduleMessageCreate {
 	) {}
 
 	async listener(message: Message) {
-		console.log('message?', message.content);
+		const raidCreated = useRaidCreated();
+		if ( raidCreated[message.content] ) {
+			if ( message.deletable ) {
+				await message.delete();
+			}
+			delete raidCreated[message.content];
+		}
 	}
 }

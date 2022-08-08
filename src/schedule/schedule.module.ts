@@ -8,10 +8,16 @@ import { ScheduleDayComponent } from './day.component';
 import { ScheduleDayButtonComponent } from './day-button.component';
 import { ScheduleSubmitButtonComponent } from './submit.component';
 import { ScheduleCreateButtonComponent } from './create.component';
+import { ScheduleMessageReactionAdd, ScheduleMessageReactionRemove } from './react.event';
 
 @Module({
 	imports: [ ScheduleSubmitModule ],
-	events: [ ScheduleReady, ScheduleMessageCreate, ],
+	events: [
+		ScheduleReady,
+		ScheduleMessageCreate,
+		ScheduleMessageReactionAdd,
+		ScheduleMessageReactionRemove,
+	],
 	components: [
 		ScheduleSubmitButtonComponent,
 		ScheduleDayComponent,

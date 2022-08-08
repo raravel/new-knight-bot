@@ -8,6 +8,10 @@ async function bootstrap() {
         'GuildMessageReactions',
         'GuildMessageReactions',
         'MessageContent',
+		'GuildEmojisAndStickers',
+		'GuildMembers',
+		'DirectMessages',
+		'DirectMessageTyping',
       ]
     })
     .SetToken(process.env.BOT_TOKEN || '')

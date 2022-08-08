@@ -89,7 +89,9 @@ export class ScheduleLevelComponent {
 
 		this.dayComponent.setData(
 			RAIDS.find(r => r.value === raid)?.label || '',
-			LEVEL[level].label
+			LEVEL[level].label,
+			raid,
+			level,
 		);
 
 		interaction.update({

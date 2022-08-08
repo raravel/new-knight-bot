@@ -50,6 +50,6 @@ export class ScheduleRaidComponent {
 		);
 		interaction.update({
 			components: row as any[],
-		})
+		});
 	}
 }

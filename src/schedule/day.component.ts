@@ -27,12 +27,15 @@ const timeIcon = [
 	'🕘',
 	'🕙',
 	'🕚',
+	'🕛',
 ];
 
 @DiscordComponent()
 export class ScheduleDayComponent {
 	private raid = '';
-	private level = '';
+	private level = ''
+	private rawRaid = '';
+	private rawLevel = '';
 
 	constructor(
 		@Inject(ScheduleSubmitButtonComponent) private submitComponent: ScheduleSubmitButtonComponent,
@@ -84,6 +87,8 @@ export class ScheduleDayComponent {
 			level: this.level,
 			dateString: `📆 ${year}년 ${month}월 ${date}일`,
 			timeString: `${timeIcon[hour]} ${hour}시 ${minute}분`,
+			rawRaid: this.rawRaid,
+			rawLevel: this.rawLevel,
 		};
 
 
@@ -101,8 +106,10 @@ export class ScheduleDayComponent {
 		});
 	}
 
-	setData(raid: string, level: string) {
+	setData(raid: string, level: string, rawRaid: string, rawLevel: string) {
 		this.raid = raid;
 		this.level = level;
+		this.rawRaid = rawRaid;
+		this.rawLevel = rawLevel;
 	}
 }
