@@ -9,21 +9,21 @@ import { CharacterCommand } from './char.command';
 import { AvatarCommand } from './avatar.command';
 
 @Module({
-	imports: [
-		{
-			id: LarkApi,
-			useValue: new LarkApi(),
-		},
-	],
-	commands: [
-		SearchCommand,
-		GemsCommand,
-		WeaponCommand,
+  imports: [
+    {
+      id: LarkApi,
+      useValue: new LarkApi(),
+    },
+  ],
+  commands: [
+    SearchCommand,
+    GemsCommand,
+    WeaponCommand,
     SkillCommand,
     AccessoryCommand,
     CharacterCommand,
     AvatarCommand,
-	],
+  ],
 })
 export class LarkModule {
 
