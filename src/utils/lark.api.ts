@@ -12,6 +12,7 @@ import {
     LarkWeapon,
     LarkAccessory,
     LarkSkill,
+    LarkBracelet,
 } from '../interfaces/lark.interface';
 
 
@@ -52,7 +53,7 @@ const parseGems = (gemList: LarkGemElement[]): LarkGem[] =>
         obj.level = +itemData.slotData.rtString.replace('Lv.', '');
         obj.iconPath = itemData.slotData.iconPath.toCDN();
         obj.title = gem.Element_000.value.text();
-        const itemPart = gem.Element_004.value.Element_001.text();
+        const itemPart = (gem.Element_004.value?.Element_001 || (gem.Element_005.value as any)?.Element_001)?.text();
         const m = itemPart.match(/\[(\W+)?\] (.*?) (재사용 대기시간|피해) (.*?)% (\W+)/);
 
         if ( m ) {
@@ -151,6 +152,13 @@ const parseSkills = (skills: any[]): LarkSkill[] =>
         return obj as LarkSkill;
     });
 
+const parseBracelet = (element) => {
+    const obj: any = {};
+    obj.title = element.Element_000.value.text();
+    obj.values = element.Element_004.value.Element_001.text().split('\n');
+    return obj as LarkBracelet;
+}
+
 export class LarkApi {
 
 	private schema = 'https://';
@@ -162,7 +170,6 @@ export class LarkApi {
 		});
 
 		url = this.schema + path.join(this.host, url);
-		console.log('url', url);
 		let res: any;
 		try {
 			res = await got.get(url);
@@ -209,6 +216,37 @@ export class LarkApi {
 			}
 		});
 
+        const servers: string[] = [];
+        const characters: any[] = [];
+        $('#expand-character-list .profile-character-list__server').each((idx, elem) => {
+            servers.push($(elem).text());
+        });
+        $('#expand-character-list .profile-character-list__char').each((idx, e) => {
+            const serverCharaters: any[] = [];
+            $(e).find('li button').each((idx, elem) => {
+                const job = $(elem).children('img').attr('alt');
+                const nickname = $(elem).children('span').text().trim();
+                const txt = $(elem).text().trim().replace(
+                    new RegExp(`${nickname}$`), ''
+                );
+                let level = 0;
+                const m = txt.match(/Lv\.(\d+)/);
+                if ( m ) level = +m[1];
+
+                serverCharaters.push({
+                    job,
+                    level,
+                    nickname,
+                });
+            });
+            characters.push({
+                server: servers[idx],
+                values: serverCharaters,
+            });
+        });
+
+        const avatarImg = $('#profile-equipment .profile-equipment__character img').attr('src') || '';
+
         const user: any = {
 			engrave,
 			battle,
@@ -221,6 +259,8 @@ export class LarkApi {
 			class: $('.profile-character-info__img').attr('alt') as string,
 			offense,
 			life,
+            characters,
+            avatarImg,
 		};
 
 		{
@@ -270,6 +310,12 @@ export class LarkApi {
                         val.Element_005?.value?.Element_000?.text() === '추가 효과';
                 });
                 user.accessories = parseAccessories(accessoryElementList);
+
+                const braceletElement = ignoreGemsList.find((val) => {
+                    return val.Element_000?.value?.text().includes('팔찌') &&
+                        val.Element_001?.value?.leftStr0?.text().includes('팔찌');
+                });
+                user.bracelet = parseBracelet(braceletElement);
 
                 const skills = Object.values(profile['Skill']);
                 user.skills = parseSkills(skills).filter((skill) => !!skill.rune || skill.level > 1);

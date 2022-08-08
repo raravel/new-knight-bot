@@ -14,6 +14,9 @@ export interface LarkUser {
     weapons: LarkWeapon[];
     accessories: LarkAccessory[];
     skills: LarkSkill[];
+    bracelet: LarkBracelet;
+    characters: LarkCharacter[];
+    avatarImg: string;
 }
 
 export type LarkGemElement = {
@@ -447,4 +450,20 @@ export type LarkSkill = {
         name: string;
         description: string;
     };
+}
+
+export type LarkBracelet = {
+    title: string;
+    values: string[];
+}
+
+export type LarkCharacter = {
+    server: string;
+    values: LarkCharacterItem[];
+}
+
+export type LarkCharacterItem = {
+    job: string;
+    level: number;
+    nickname: string;
 }

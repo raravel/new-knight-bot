@@ -4,6 +4,9 @@ import { SearchCommand } from './search.command';
 import { GemsCommand } from './gems.command';
 import { WeaponCommand } from './weapon.command';
 import { SkillCommand } from './skill.command';
+import { AccessoryCommand } from './accessory.command';
+import { CharacterCommand } from './char.command';
+import { AvatarCommand } from './avatar.command';
 
 @Module({
 	imports: [
@@ -17,6 +20,9 @@ import { SkillCommand } from './skill.command';
 		GemsCommand,
 		WeaponCommand,
     SkillCommand,
+    AccessoryCommand,
+    CharacterCommand,
+    AvatarCommand,
 	],
 })
 export class LarkModule {
