@@ -79,7 +79,7 @@ export class ScheduleSubmitButtonComponent {
 				`${this.data.dateString}\n` +
 				`${this.data.timeString}\n\n` +
 				`${this.data.raid}(${this.data.level}) 레이드 스레드입니다.\n`+
-				`아래 버튼을 눌러 참여해 주세요.`
+				`생성자: <@${interaction.user.id}>`
 		});
 	}
 }

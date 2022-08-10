@@ -6,6 +6,7 @@ import {
 } from "@cordwork/core";
 import { ActionRowBuilder, ButtonComponent, TextChannel } from 'discord.js';
 import { ScheduleCreateButtonComponent } from "./create.component";
+import { ScheduleRefreshButtonComponent } from "./refresh.component";
 import { useRequestMessages, emojiRole } from "./tunnel";
 
 
@@ -17,6 +18,7 @@ export class ScheduleReady {
 	constructor(
 		@Inject(CordWorkClient) private client: CordWorkClient,
 		@Inject(ScheduleCreateButtonComponent) private createButtonComponent: ScheduleCreateButtonComponent,
+		@Inject(ScheduleRefreshButtonComponent) private refreshButtonComponent: ScheduleRefreshButtonComponent,
 	) {}
 
 	private async initialize(): Promise<void> {
@@ -35,38 +37,43 @@ export class ScheduleReady {
 	async listener() {
 		await this.initialize();
 		const row = new ActionRowBuilder()
-			.addComponents(this.createButtonComponent.create());
+			.addComponents(
+				this.createButtonComponent.create(),
+				this.refreshButtonComponent.create()
+			);
 		this.channels.forEach(async (channel, idx) => {
+			const { threads } = await channel.threads.fetchActive();
+			const emojis = Array.from(channel.guild.emojis.cache.values())
+			.filter((emoji) => Object.keys(emojiRole).includes(emoji.name || ''));
+			const chat = {
+				content: 
+					`현재 활성화된 레이드 일정입니다.\n`+
+					`**레이드 공격대 생성**을 눌러 새로운 일정을 만들 수 있습니다.\n\n` +
+					(Array.from(threads.values())
+					.map((thread) => `<#${thread.id}>`)
+					.join('\n') || '```\n활성화된 레이드가 없습니다.\n```') + '\n\n' +
+					`아래 이모지들을 눌러서 원하는 레이드의 일정을 알림받을 수 있습니다.\n` +
+					emojis.map((emoji) => `<:${emoji.name}:${emoji.id}> - ${emojiRole[emoji.name || '']}`).join('\n'),
+				components: [
+					row as any,
+				],
+			};
+
+
 			const messages = await channel.messages.fetch({ limit: 10 });
 			let component = messages.find(message => {
 				const button = message?.components[0]?.components[0] as ButtonComponent;
 				return button?.customId === 'schedule-create-button-builder-v1';
 			});
 			if ( !component ) {
-				const { threads } = await channel.threads.fetchActive();
-				const emojis = Array.from(channel.guild.emojis.cache.values())
-				.filter((emoji) => Object.keys(emojiRole).includes(emoji.name || ''));
-				component = await channel.send({
-					content: 
-						`현재 활성화된 레이드 일정입니다.\n`+
-						`**레이드 공격대 생성**을 눌러 새로운 일정을 만들 수 있습니다.\n\n` +
-						Array.from(threads.values())
-						.map((thread) => `<#${thread.id}>`)
-						.join('\n') + '\n\n' +
-						`아래 이모지들을 눌러서 원하는 레이드의 일정을 알림받을 수 있습니다.\n` +
-						emojis.map((emoji) => `<:${emoji.name}:${emoji.id}> - ${emojiRole[emoji.name || '']}`).join('\n'),
-					components: [
-						row as any,
-					],
-				});
+				component = await channel.send(chat);
 
 				await Promise.all(
 					emojis.map((emoji) => component?.react(emoji))
 				);
+			} else {
+				await component.edit(chat);
 			}
-
-			
-			
 
 			const reqMsgs = useRequestMessages();
 			reqMsgs[channel.id] = component;

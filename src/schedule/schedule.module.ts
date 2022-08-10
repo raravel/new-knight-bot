@@ -9,6 +9,7 @@ import { ScheduleDayButtonComponent } from './day-button.component';
 import { ScheduleSubmitButtonComponent } from './submit.component';
 import { ScheduleCreateButtonComponent } from './create.component';
 import { ScheduleMessageReactionAdd, ScheduleMessageReactionRemove } from './react.event';
+import { ScheduleRefreshButtonComponent } from './refresh.component';
 
 @Module({
 	imports: [ ScheduleSubmitModule ],
@@ -25,6 +26,7 @@ import { ScheduleMessageReactionAdd, ScheduleMessageReactionRemove } from './rea
 		ScheduleLevelComponent,
 		ScheduleRaidComponent,
 		ScheduleCreateButtonComponent,
+		ScheduleRefreshButtonComponent,
 	],
 })
 export class ScheduleModule {
