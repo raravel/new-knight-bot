@@ -2,45 +2,10 @@ import { DiscordComponent, Inject } from "@cordwork/core";
 import { ActionRowBuilder, SelectMenuBuilder, SelectMenuComponentOptionData } from "discord.js";
 import { ScheduleDayComponent } from "./day.component";
 import { ScheduleDayButtonComponent } from "./day-button.component";
+import { LEVEL, RAIDS, RAIDS_LEVEL } from './tunnel';
 
-const LEVEL: Record<string, SelectMenuComponentOptionData> = {
-	'normal': {
-		label: '노말',
-		value: 'normal',
-	},
-	'hard': {
-		label: '하드',
-		value: 'hard',
-	},
-	'hell': {
-		label: '헬',
-		value: 'hell',
-	},
-};
 
-const RAIDS_LEVEL: Record<string, SelectMenuComponentOptionData[]> = {
-	'valtan': [
-		LEVEL['normal'],
-		LEVEL['hard'],
-		LEVEL['hell'],
-	],
-	'viakiss': [
-		LEVEL['normal'],
-		LEVEL['hard'],
-		LEVEL['hell'],
-	],
-}
 
-const RAIDS: SelectMenuComponentOptionData[] = [
-	{
-		label: '발탄',
-		value: 'valtan',
-	},
-	{
-		label: '비아키스',
-		value: 'viakiss',
-	},
-];
 
 @DiscordComponent()
 export class ScheduleLevelComponent {

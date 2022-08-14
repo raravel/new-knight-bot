@@ -1,19 +1,9 @@
 import { DiscordComponent, Inject } from "@cordwork/core";
-import { SelectMenuInteraction, SelectMenuBuilder, SelectMenuComponentOptionData, ActionRowBuilder } from "discord.js";
+import { SelectMenuInteraction, SelectMenuBuilder, ActionRowBuilder } from "discord.js";
 import { ScheduleLevelComponent } from "./level.component";
 import { cloneDeep } from 'lodash';
+import { RAIDS } from "./tunnel";
 
-
-const RAIDS: SelectMenuComponentOptionData[] = [
-	{
-		label: '발탄',
-		value: 'valtan',
-	},
-	{
-		label: '비아키스',
-		value: 'viakiss',
-	},
-];
 
 @DiscordComponent()
 export class ScheduleRaidComponent {
