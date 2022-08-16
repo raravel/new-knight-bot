@@ -22,8 +22,8 @@ export class SignupSubmitComponent extends Setable {
 		const member = interaction.member as GuildMember;
 		const guild = interaction.guild as Guild;
 		const nameRole = await guild.roles.create({
-			name: user.name,
-			color: [0, 0, 0],
+			name: `닉:${user.name}`,
+			color: [164, 235, 52],
 			reason: '',
 		});
 		await member.roles.add(serverRole);
