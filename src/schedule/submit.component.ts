@@ -1,13 +1,15 @@
 import { CordWorkClient, DiscordComponent, Inject } from "@cordwork/core";
-import { ButtonBuilder, ButtonStyle, ButtonInteraction, TextChannel, ThreadAutoArchiveDuration, FetchedThreads } from "discord.js";
+import { ButtonBuilder, ButtonStyle, ButtonInteraction, TextChannel, ThreadAutoArchiveDuration, FetchedThreads, ActionRowBuilder } from "discord.js";
 import { useRaidCreated, useRequestMessages, emojiRole } from "./tunnel";
+import { ScheduleRemoveButtonComponent } from "./submit/remove-raid.button";
 
 @DiscordComponent()
 export class ScheduleSubmitButtonComponent {
 	public data: any = {};
 	
 	constructor(
-		@Inject(CordWorkClient) private client: CordWorkClient
+		@Inject(CordWorkClient) private client: CordWorkClient,
+		@Inject(ScheduleRemoveButtonComponent) private removeButton: ScheduleRemoveButtonComponent,
 	) {}
 
 	create(): ButtonBuilder {
@@ -74,12 +76,17 @@ export class ScheduleSubmitButtonComponent {
 			})
 		}
 
-		await thread.send({
+		const msg = await thread.send({
 			content:
 				`${this.data.dateString}\n` +
 				`${this.data.timeString}\n\n` +
 				`${this.data.raid}(${this.data.level}) 레이드 스레드입니다.\n`+
-				`생성자: <@${interaction.user.id}>`
+				`생성자: <@${interaction.user.id}>`,
+			components: [
+				new ActionRowBuilder()
+				.addComponents(this.removeButton.create()) as any
+			],
 		});
+		await msg.pin();
 	}
 }

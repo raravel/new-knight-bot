@@ -10,6 +10,8 @@ import { ScheduleSubmitButtonComponent } from './submit.component';
 import { ScheduleCreateButtonComponent } from './create.component';
 import { ScheduleMessageReactionAdd, ScheduleMessageReactionRemove } from './react.event';
 import { ScheduleRefreshButtonComponent } from './refresh.component';
+import { ScheduleRemoveButtonComponent } from './submit/remove-raid.button';
+import { ScheduleRemoveSubmitComponent } from './submit/remove-submit.button';
 
 @Module({
 	imports: [ ScheduleSubmitModule ],
@@ -20,6 +22,8 @@ import { ScheduleRefreshButtonComponent } from './refresh.component';
 		ScheduleMessageReactionRemove,
 	],
 	components: [
+		ScheduleRemoveSubmitComponent,
+		ScheduleRemoveButtonComponent,
 		ScheduleSubmitButtonComponent,
 		ScheduleDayComponent,
 		ScheduleDayButtonComponent,
