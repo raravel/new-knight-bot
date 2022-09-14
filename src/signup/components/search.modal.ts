@@ -8,6 +8,7 @@ const guildList = [
 	'기사혈석학원',
 	'기사혈석지부',
 	'기사학원아만지부',
+    '기사학원실리안지부',
 ];
 
 @DiscordComponent()
