@@ -30,7 +30,7 @@ export class UserPickCommand {
 		}
 
 		const members = Array.from(membersManager?.values() as IterableIterator<GuildMember|ThreadMember> || []);
-		const pickedMember = random(members.map(({ user }) => user));
+		const pickedMember = random(members);
 		if ( pickedMember ) {
 			interaction.reply({
 				content: `<@${pickedMember.id}>님이 당첨되셨습니다!`,
