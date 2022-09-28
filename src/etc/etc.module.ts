@@ -1,6 +1,7 @@
 import { Module } from '@cordwork/core';
 import { HangangCommand } from './commands/hangang.commands';
 import { RiceCalcCommand } from './commands/rice-calc.command';
+import { UserPickCommand } from './commands/user-pick.command';
 import { PercentageEvent } from './events/percentage.event';
 
 @Module({
@@ -10,6 +11,7 @@ import { PercentageEvent } from './events/percentage.event';
 	commands: [
 		RiceCalcCommand,
 		HangangCommand,
+		UserPickCommand,
 	],
 })
 export class EtcModule {
