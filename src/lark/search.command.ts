@@ -1,6 +1,7 @@
 import { ApplicationCommandOptionType, CommandInteraction, EmbedBuilder, TextBasedChannel } from 'discord.js';
 import { DiscordCommand, Inject } from '@cordwork/core';
 import { LarkApi } from '../utils/lark.api';
+import * as lostark from 'lostark';
 
 @DiscordCommand({
   name: '정보',
@@ -22,11 +23,11 @@ export class SearchCommand {
   
   async listener(interaction: CommandInteraction): Promise<void> {
     const nickname = interaction.options.get('캐릭터')?.value as string || '';
-    const user = await this.larkApi.getUser(nickname);
-    if ( !Number.isNaN(user.life) ) {
+    const user = await lostark.char(nickname);
+    if ( user.status === 'success' ) {
       const msg = new EmbedBuilder()
       .setColor('#c231c4')
-      .setTitle(`${user.name}님의 정보`)
+      .setTitle(`${user.nickname}님의 정보`)
       .addFields(
         {
           name: '기본 정보',
@@ -38,14 +39,14 @@ export class SearchCommand {
         },
         {
           name: '기본 특성',
-          value: `공격력: ${user.offense}\n` +
-              `최대 생명력: ${user.life}\n`,
+          value: `공격력: ${user.basic.offense}\n` +
+              `최대 생명력: ${user.basic.life}\n`,
           inline: true,
         },
         {
           name: '길드',
           value: '```yaml\n'+
-            user.clan + '\n'+
+            user.guild + '\n'+
             '```',
           inline: true
         },
@@ -55,7 +56,7 @@ export class SearchCommand {
         {
           name: '전투 특성',
           value: user.battle
-            .map(({ text, value }) => `${text} +${value}`)
+            .map(({ name, amount }) => `${name} +${amount}`)
             .join('\n'),
           inline: true
         },
@@ -63,7 +64,7 @@ export class SearchCommand {
         {
           name: '장착 각인',
           value: user.engrave
-            .map(({ text, value }) => `${text} +${value}`)
+            .map(({ name, level }) => `${name} +${level}`)
             .join('\n'),
           inline: true,
         },

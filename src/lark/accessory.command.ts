@@ -1,6 +1,7 @@
 import { ApplicationCommandOptionType, CommandInteraction, EmbedBuilder, TextBasedChannel } from 'discord.js';
 import { DiscordCommand, Inject } from '@cordwork/core';
 import { LarkApi } from '../utils/lark.api';
+import * as lostark from 'lostark';
 
 @DiscordCommand({
   name: '악세',
@@ -22,30 +23,30 @@ export class AccessoryCommand {
   
   async listener(interaction: CommandInteraction): Promise<void> {
     const nickname = interaction.options.get('캐릭터')?.value as string || '';
-    const user = await this.larkApi.getUser(nickname);
-    if ( !Number.isNaN(user.life) ) {
-      const msg = new EmbedBuilder()
-      .setColor('#c231c4')
-      .setTitle(`${user.name}님의 장신구`)
-      .addFields(
-        ...user.accessories.map((accessory) => ({
-          name: `${accessory.title} +${accessory.quality}`,
-          value: accessory.status.map((s) => `${s.text} +${s.value}`).join(`, `) + '\n'
-              + accessory.engrave.map((e) => `[${e.text}] +${e.value}`).join('\n'),
-        })),
-        { name: '\u200B', value: '\u200B' },
-        {
-          name: user.bracelet.title,
-          value: user.bracelet.values.join('\n'),
-        },
-      );
-
-      await interaction.reply({ embeds: [msg] });
-    } else {
+    const user = await lostark.char(nickname);
+    if ( user.status !== 'success' ){
       await interaction.reply({
         content: `**${nickname}** 유저의 정보를 찾을 수 없습니다.`
       });
+      return;
     }
+    const msg = new EmbedBuilder()
+    .setColor('#c231c4')
+    .setTitle(`${user.nickname}님의 장신구`)
+    .addFields(
+      ...user.accessory.map((accessory) => ({
+        name: `${accessory.name} +${accessory.quality}`,
+        value: accessory.status.map((s) => `${s.name} +${s.amount}`).join(`, `) + '\n'
+            + accessory.engraves.map((e) => `[${e.name}] +${e.level}`).join('\n'),
+      })),
+      { name: '\u200B', value: '\u200B' },
+      {
+        name: user.bracelet?.title || '',
+        value: (user.bracelet?.effects || []).join('\n'),
+      },
+    );
+
+    await interaction.reply({ embeds: [msg] });
   }
 
 }

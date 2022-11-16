@@ -1,6 +1,7 @@
 import { ApplicationCommandOptionType, CommandInteraction, EmbedBuilder, TextBasedChannel } from 'discord.js';
 import { DiscordCommand, Inject } from '@cordwork/core';
 import { LarkApi } from '../utils/lark.api';
+import * as lostark from 'lostark';
 
 @DiscordCommand({
   name: '장비',
@@ -22,16 +23,16 @@ export class WeaponCommand {
   
   async listener(interaction: CommandInteraction): Promise<void> {
     const nickname = interaction.options.get('캐릭터')?.value as string || '';
-    const user = await this.larkApi.getUser(nickname);
-    if ( !Number.isNaN(user.life) ) {
+    const user = await lostark.char(nickname);
+    if ( user.status === 'success' ) {
       const msg = new EmbedBuilder()
       .setColor('#c231c4')
-      .setTitle(`${user.name}님의 장비`)
+      .setTitle(`${user.nickname}님의 장비`)
       .addFields(
         {
           name: '\u200B',
-          value: user.weapons.map(({ upgrade, title, quality }) => 
-            `+${upgrade} ${title} (품질: ${quality})`,
+          value: user.equipment.map(({ upgrade, name, quality }) => 
+            `+${upgrade} ${name} (품질: ${quality})`,
           ).join('\n')
         }
       );

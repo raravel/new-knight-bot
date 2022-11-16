@@ -1,6 +1,7 @@
 import { ApplicationCommandOptionType, CommandInteraction, EmbedBuilder, TextBasedChannel } from 'discord.js';
 import { DiscordCommand, Inject } from '@cordwork/core';
 import { LarkApi } from '../utils/lark.api';
+import * as lostark from 'lostark';
 
 @DiscordCommand({
   name: '스킬',
@@ -22,15 +23,15 @@ export class SkillCommand {
   
   async listener(interaction: CommandInteraction): Promise<void> {
     const nickname = interaction.options.get('캐릭터')?.value as string || '';
-    const user = await this.larkApi.getUser(nickname);
-    if ( !Number.isNaN(user.life) ) {
+    const user = await lostark.char(nickname);
+    if ( user.status === 'success' ) {
       const msg = new EmbedBuilder()
       .setColor('#c231c4')
-      .setTitle(`${user.name}님의 스킬`)
+      .setTitle(`${user.nickname}님의 스킬`)
       .addFields(
         ...user.skills.map((skill) => ({
-          name: `${skill.title} ${skill.level} ${skill.rune ? `[${skill.rune.name}]` : ''}`,
-          value: skill.tridpods.map((tridpod) => `${tridpod.name} ${tridpod.level}`).join('\n') || '\u200B',
+          name: `${skill.name} ${skill.level} ${skill.rune ? `[${skill.rune.name}]` : ''}`,
+          value: skill.tripodList.map((tridpod) => `${tridpod.name} ${tridpod.level}`).join('\n') || '\u200B',
         }))
       );
 
