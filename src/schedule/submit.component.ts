@@ -30,6 +30,7 @@ export class ScheduleSubmitButtonComponent {
 		await interaction.deferReply({ ephemeral: true });
 		const title = `${this.dateFormat(this.data.date)} ${this.data.raid}(${this.data.level})`;
 		const reaction_key = `${this.data.rawRaid}_${this.data.rawLevel}`;
+		const guild = await interaction.guild?.fetch();
 
 		const raidCreated = useRaidCreated();
 		raidCreated[title] = true;
@@ -66,14 +67,19 @@ export class ScheduleSubmitButtonComponent {
 			});
 			const reaction = requestMessage.reactions.cache.find((reaction) => reaction.emoji.name === reaction_key);
 			const reactionUsers = await reaction?.users.fetch();
+			const members = await guild?.members.fetch();
 			reactionUsers?.forEach(async (user) => {
 				if ( user.id === this.client.user?.id ) return;
-				user.send({
-					content: `${channel.guild.name}에서 생성된 **${this.data.raid}(${this.data.level})레이드**의 알람입니다.\n` +
-						`아래 주소를 클릭해서 레이드 일정 채널로 이동할 수 있습니다.\n\n` +
-						thread.url,
-				});
-			})
+				const member = members?.find((member) => member.id === user.id);
+				if ( member ) {
+					console.log('Raid alarm to', member.nickname, member.id);
+					member.send({
+						content: `${channel.guild.name}에서 생성된 **${this.data.raid}(${this.data.level})레이드**의 알람입니다.\n` +
+							`아래 주소를 클릭해서 레이드 일정 채널로 이동할 수 있습니다.\n\n` +
+							thread.url,
+					});
+				}
+			});
 		}
 
 		const msg = await thread.send({
