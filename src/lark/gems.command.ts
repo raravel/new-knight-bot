@@ -3,6 +3,20 @@ import { DiscordCommand, Inject } from '@cordwork/core';
 import { LarkApi } from '../utils/lark.api';
 import * as lostark from 'lostark';
 
+const levelEmoji = [
+  '0⃣',
+  '1⃣',
+  '2⃣',
+  '3⃣',
+  '4⃣',
+  '5⃣',
+  '6⃣',
+  '7⃣',
+  '8⃣',
+  '9⃣',
+  '🔟',
+];
+
 @DiscordCommand({
   name: '보석',
   description: '로스트아크 캐릭터의 보석 목록을 가져옵니다.',
@@ -16,11 +30,11 @@ import * as lostark from 'lostark';
   ],
 })
 export class GemsCommand {
-
+  
   constructor(
     @Inject(LarkApi) private larkApi: LarkApi,
   ) {}
-  
+    
   async listener(interaction: CommandInteraction): Promise<void> {
     const nickname = interaction.options.get('캐릭터')?.value as string || '';
     const user = await lostark.char(nickname);
@@ -29,12 +43,13 @@ export class GemsCommand {
       .setColor('#c231c4')
       .setTitle(`${user.nickname}님의 보석`)
       .addFields(
-		...user.gems.map(({ name, description }) => ({
-			name,
-			value: description,
-		}))
+        ...user.jewels.sort((a, b) => b.level - a.level)
+        .map(({ name, effect }) => ({
+          name: `${name.includes('멸화') ? '💎' : '📀'}  ${name.replace(/^(\d+)/, (m, p1) => levelEmoji[p1])}`,
+          value: effect,
+        }))
       );
-
+        
       await interaction.reply({ embeds: [msg] });
     } else {
       await interaction.reply({
