@@ -41,6 +41,10 @@ export const RAIDS: SelectMenuComponentOptionData[] = [
 		label: '일리아칸',
 		value: 'akkan',
 	},
+	{
+		label: '카양겔',
+		value: 'kayanggel',
+	},
 ];
 
 export const LEVEL: Record<string, SelectMenuComponentOptionData> = {
@@ -55,6 +59,18 @@ export const LEVEL: Record<string, SelectMenuComponentOptionData> = {
 	'hell': {
 		label: '헬',
 		value: 'hell',
+	},
+	'hard1': {
+		label: '하드1',
+		value: 'hard1',
+	},
+	'hard2': {
+		label: '하드2',
+		value: 'hard2',
+	},
+	'hard3': {
+		label: '하드3',
+		value: 'hard3',
 	},
 };
 
@@ -80,5 +96,11 @@ export const RAIDS_LEVEL: Record<string, SelectMenuComponentOptionData[]> = {
 	'akkan': [
 		LEVEL['normal'],
 		LEVEL['hard'],
+	],
+	'kayanggel': [
+		LEVEL['normal'],
+		LEVEL['hard1'],
+		LEVEL['hard2'],
+		LEVEL['hard3'],
 	],
 }

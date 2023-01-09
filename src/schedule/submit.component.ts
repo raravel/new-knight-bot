@@ -66,20 +66,22 @@ export class ScheduleSubmitButtonComponent {
 					emojis.map((emoji) => `<:${emoji.name}:${emoji.id}> - ${emojiRole[emoji.name || '']}`).join('\n'),
 			});
 			const reaction = requestMessage.reactions.cache.find((reaction) => reaction.emoji.name === reaction_key);
-			const reactionUsers = await reaction?.users.fetch();
-			const members = await guild?.members.fetch();
-			reactionUsers?.forEach(async (user) => {
-				if ( user.id === this.client.user?.id ) return;
-				const member = members?.find((member) => member.id === user.id);
-				if ( member ) {
-					console.log('Raid alarm to', member.nickname, member.id);
-					member.send({
-						content: `${channel.guild.name}에서 생성된 **${this.data.raid}(${this.data.level})레이드**의 알람입니다.\n` +
-							`아래 주소를 클릭해서 레이드 일정 채널로 이동할 수 있습니다.\n\n` +
-							thread.url,
-					});
-				}
-			});
+			if ( reaction ) {
+				const reactionUsers = await reaction?.users.fetch();
+				const members = await guild?.members.fetch();
+				reactionUsers?.forEach(async (user) => {
+					if ( user.id === this.client.user?.id ) return;
+					const member = members?.find((member) => member.id === user.id);
+					if ( member ) {
+						console.log('Raid alarm to', member.nickname, member.id);
+						member.send({
+							content: `${channel.guild.name}에서 생성된 **${this.data.raid}(${this.data.level})레이드**의 알람입니다.\n` +
+								`아래 주소를 클릭해서 레이드 일정 채널로 이동할 수 있습니다.\n\n` +
+								thread.url,
+						});
+					}
+				});
+			}
 		}
 
 		const msg = await thread.send({
