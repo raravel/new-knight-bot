@@ -3,7 +3,7 @@ import { ButtonBuilder, ButtonStyle, ButtonInteraction, GuildMember, Guild } fro
 import { Setable } from "../../utils/setable.util";
 
 @DiscordComponent()
-export class SignupSubmitComponent extends Setable {
+export class CreateTableSubmitComponent extends Setable {
 
 	create(): ButtonBuilder {
 		const builder = new ButtonBuilder()
@@ -22,7 +22,7 @@ export class SignupSubmitComponent extends Setable {
 		const member = interaction.member as GuildMember;
 		const guild = interaction.guild as Guild;
 		const nameRole = await guild.roles.create({
-			name: `닉:${user.nickname}`,
+			name: `닉:${user.name}`,
 			color: [164, 235, 52],
 			reason: '',
 		});

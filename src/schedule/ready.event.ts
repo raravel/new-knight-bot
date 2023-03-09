@@ -26,7 +26,7 @@ export class ScheduleReady {
 		for ( const oAuthGuild of guilds.values() ) {
 			const guild = await oAuthGuild.fetch();
 			const channels = await guild.channels.fetch();
-			const channel = channels.find( channel => channel.name === '모험가길드' )
+			const channel = channels.find( channel => channel?.name === '모험가길드' )
 			if ( !channel ) continue;
 			this.channels.push(
 				await channel.fetch() as TextChannel

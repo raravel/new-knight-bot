@@ -22,7 +22,7 @@ export class SignupReadyEvent {
 		for ( const oAuthGuild of guilds.values() ) {
 			const guild = await oAuthGuild.fetch();
 			const channels = await guild.channels.fetch();
-			const channel = channels.find( channel => channel.name === '레온하트' )
+			const channel = channels.find( channel => channel?.name === '레온하트' )
 			if ( !channel ) continue;
 			this.channels.push(
 				await channel.fetch() as TextChannel

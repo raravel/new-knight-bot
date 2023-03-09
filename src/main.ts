@@ -12,6 +12,7 @@ async function bootstrap() {
       'GuildMembers',
       'DirectMessages',
       'DirectMessageTyping',
+      'GuildVoiceStates',
     ]
   })
   .SetToken(process.env.BOT_TOKEN || '')

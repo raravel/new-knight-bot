@@ -21,7 +21,7 @@ export class ScheduleRemoveButtonComponent {
 
 	async listener(interaction: ButtonInteraction): Promise<void> {
 		const messages = await interaction.channel?.messages.fetchPinned();
-		const message = messages?.find((message) => 
+		const message = (messages as any).find((message) => 
 			!!message
 			.components
 			.find((component) =>
